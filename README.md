@@ -1,2 +1,4 @@
 # SSharpPro-MPC3-Utility
-S#Pro Utility Class for MPC3-x Button Panels
+S#Pro Utility Class for Crestron MPC3-x Button Panels
+
+work in progress
