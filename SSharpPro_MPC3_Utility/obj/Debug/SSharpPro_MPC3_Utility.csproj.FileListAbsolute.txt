@@ -1,0 +1,9 @@
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\obj\Debug\ResolveAssemblyReference.cache
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\SSharpPro_MPC3_Utility.dll
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\SSharpPro_MPC3_Utility.pdb
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\Crestron.SimplSharpPro.DeviceSupport.dll
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\SimplSharpCustomAttributesInterface.dll
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\SimplSharpHelperInterface.dll
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\bin\Debug\SimplSharpPro.exe
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\obj\Debug\SSharpPro_MPC3_Utility.dll
+E:\C#\s#\MPC3_Utility\SSharpPro_MPC3_Utility\SSharpPro_MPC3_Utility\obj\Debug\SSharpPro_MPC3_Utility.pdb

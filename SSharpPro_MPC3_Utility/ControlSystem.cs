@@ -70,6 +70,7 @@ namespace SSharpPro_MPC3_Utility
             try
             {
                 tp01 = this.MPC3x201TouchscreenSlot;
+
                 if (tp01.Register() == eDeviceRegistrationUnRegistrationResponse.Success)
                 {
                     Debug.Log(">>> MPC3 Touchscreen registered successfully.", Debug.ErrorLevel.None, true);
@@ -78,6 +79,7 @@ namespace SSharpPro_MPC3_Utility
                 {
                     Debug.Log(">>> MPC3 Touchscreen failed to register", Debug.ErrorLevel.Error, true);
                 }
+
                 tp01.ButtonStateChange += new ButtonEventHandler(tp01_ButtonStateChange);
                 Mpc3Initialize(tp01);
             }
@@ -116,6 +118,14 @@ namespace SSharpPro_MPC3_Utility
                     else if (btnNum == 1 || btnNum == 4)
                     {
                         buttonPanelUtility.ToggleFeedback(btnNum);
+                    }
+                    else if (btnNum == 2)
+                    {
+                        buttonPanelUtility.DecrementVolumeBar(655);
+                    }
+                    else if (btnNum == 3)
+                    {
+                        buttonPanelUtility.IncrementVolumeBar(655);
                     }
                 }
             }
@@ -218,9 +228,9 @@ namespace SSharpPro_MPC3_Utility
 
         #region Utility Methods
         /// <summary>
-        /// mpc3Initialize - sets initial settings for MPC3x102
+        /// mpc3Initialize - sets initial settings for MPC3x201
         /// </summary>
-        /// <param name="tp">MPC3x102Touchscreen</param>
+        /// <param name="tp">MPC3x201Touchscreen</param>
         void Mpc3Initialize(MPC3x201Touchscreen tp)
         {
             //enable buttons
@@ -230,14 +240,13 @@ namespace SSharpPro_MPC3_Utility
             tp.EnableVolumeUpButton();
             tp.EnableVolumeDownButton();
 
-            for (uint btn = 1; btn < 7; btn++)
-            {
-                tp.EnableNumericalButton(btn);
-            }
-
             //map buttons to methods
             buttonPanelUtility = new ButtonPanelUtility(tp);
+            //enable numerical buttons
+            buttonPanelUtility.EnableAllNumericalButtons(1,6);
+            buttonPanelUtility.SetVolumeBar(32000);
 
+            //assign buttons to methods
             buttonPanelUtility.AssignButton(eButtonName.Power, new Action(() => CrestronConsole.PrintLine("Power Command Executed")));
             buttonPanelUtility.AssignButton(eButtonName.Mute, new Action(() => CrestronConsole.PrintLine("Mute Command Executed")));
             buttonPanelUtility.AssignButton(eButtonName.VolumeUp, new Action(() => CrestronConsole.PrintLine("VolumeUp Command Executed")));
@@ -248,8 +257,9 @@ namespace SSharpPro_MPC3_Utility
             buttonPanelUtility.AssignButton(eButtonName.Button4, new Action(() => CrestronConsole.PrintLine("Button4 Command Executed")));
             buttonPanelUtility.AssignButton(eButtonName.Button5, new Action(() => CrestronConsole.PrintLine("Button5 Command Executed")));
             buttonPanelUtility.AssignButton(eButtonName.Button6, new Action(() => CrestronConsole.PrintLine("Button6 Command Executed")));
-            buttonPanelUtility.CreateMutuallyExclusiveSet(new List<Feedback> 
-                {tp.Feedback1, tp.Feedback2, tp.Feedback3, tp.Feedback4, tp.Feedback5, tp.Feedback6});
+
+            //create mutually exclusive set so only one source button can have a high state at a time
+            buttonPanelUtility.CreateMutuallyExclusiveSet(new List<Feedback> {tp.Feedback1, tp.Feedback2, tp.Feedback3, tp.Feedback4, tp.Feedback5, tp.Feedback6});
 
             //initialize ComPort 1
             if(this.SupportsComPort)
