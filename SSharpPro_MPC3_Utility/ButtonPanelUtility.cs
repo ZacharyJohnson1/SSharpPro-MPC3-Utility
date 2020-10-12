@@ -13,7 +13,7 @@ namespace SSharpPro_MPC3_Utility
         /// <summary>
         /// generic MPC3 touchscreen object
         /// </summary>
-        private MPC3Basic _touchscreen;
+        private MPC3Basic _touchscreen { get; set; }
 
         /// <summary>
         /// stores the button name and user-definied method as key value pairs
@@ -87,11 +87,16 @@ namespace SSharpPro_MPC3_Utility
         {
             if (_buttonMap.ContainsKey(btnName))
             {
-                _buttonMap[btnName].Invoke();
+                var exeBtnDel = _buttonMap[btnName];
+                if (exeBtnDel != null)
+                {
+                    exeBtnDel.Invoke();
+                }
             }
             else
             {
                 Debug.Log(">>> Error : " + btnName + " does not exist in dictionary.", Debug.ErrorLevel.Warning, true);
+                throw new KeyNotFoundException("Error: " + btnName + " does not exist in dictionary");
             }
         }
 
@@ -145,6 +150,26 @@ namespace SSharpPro_MPC3_Utility
         }
 
         /// <summary>
+        /// remove a List of Feedback objects from the list of mutually exclusive sets
+        /// given a list of type Feedback
+        /// </summary>
+        /// <param name="set">list to remove</param>
+        public void RemoveMutuallyExclusiveSet(List<Feedback> set)
+        {
+            _mutuallyExclusiveSets.Remove(set);
+        }
+
+        /// <summary>
+        /// remove a List of Feedback objects from the list of mutually exclusive sets
+        /// given an index of type int
+        /// </summary>
+        /// <param name="index">index of list to remove</param>
+        public void RemoveMutuallyExclusiveSet(int index)
+        {
+            _mutuallyExclusiveSets.RemoveAt(index);
+        }
+
+        /// <summary>
         /// checks if button is part of a user-defined mutually exclusive set 
         /// and returns that set
         /// </summary>
@@ -163,16 +188,8 @@ namespace SSharpPro_MPC3_Utility
         }
 
         /// <summary>
-        /// return volume bars current value
-        /// </summary>
-        /// <returns></returns>
-        public ushort GetVolumeBar()
-        {
-            return _touchscreen.VolumeBargraph.UShortValue;
-        }
-
-        /// <summary>
         /// sets volume bar graph
+        /// range: 0 - 65535
         /// </summary>
         /// <param name="volume"></param>
         public void SetVolumeBar(ushort volume)
@@ -182,7 +199,18 @@ namespace SSharpPro_MPC3_Utility
         }
 
         /// <summary>
+        /// return volume bars current value
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns></returns>
+        public ushort GetVolumeBar()
+        {
+            return _touchscreen.VolumeBargraph.UShortValue;
+        }
+
+        /// <summary>
         /// increment volume bar graph by user-defined offset
+        /// range: 0 - 65535
         /// </summary>
         /// <param name="offset"></param>
         public void IncrementVolumeBar(ushort offset)
@@ -196,6 +224,7 @@ namespace SSharpPro_MPC3_Utility
 
         /// <summary>
         /// decrement volume bar graph by user-defined offset
+        /// range: 0 - 65535
         /// </summary>
         /// <param name="offset"></param>
         public void DecrementVolumeBar(ushort offset)
@@ -208,14 +237,132 @@ namespace SSharpPro_MPC3_Utility
         }
 
         /// <summary>
-        /// Enable all Numerical buttons depending on touchscreen type
+        /// enables a numerical button given the button number
         /// </summary>
-        public void EnableAllNumericalButtons(uint btnStart, uint btnStop)
+        /// <param name="btnNum"></param>
+        public void EnableNumericalButton(uint btnNum)
+        {
+            _touchscreen.EnableNumericalButton(btnNum);
+        }
+
+        /// <summary>
+        /// disables a numerical button given the button number
+        /// </summary>
+        /// <param name="btnNum"></param>
+        public void DisableNumericalButton(uint btnNum)
+        {
+            _touchscreen.DisableNumericalButton(btnNum);
+        }
+
+        /// <summary>
+        /// Enable range of Numerical buttons depending on touchscreen type
+        /// </summary>
+        public void EnableNumericalButtons(uint btnStart, uint btnStop)
         {
             for (uint btn = btnStart; btn <= btnStop; btn++)
             {
                 _touchscreen.EnableNumericalButton(btn);
             }
+        }
+
+        /// <summary>
+        /// sets active brightness of buttons
+        /// range: 0 - 65535
+        /// </summary>
+        /// <param name="value">brightness value</param>
+        public void SetActiveBrightness(ushort value)
+        {
+            _touchscreen.ActiveBrightness.UShortValue = value;
+        }
+
+        /// <summary>
+        /// returns the active brightness of buttons
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns>brightness value</returns>
+        public ushort GetActiveBrightness()
+        {
+            return _touchscreen.ActiveBrightnessFeedBack.UShortValue;
+        }
+
+        /// <summary>
+        /// sets active timeout in minutes
+        /// range: 0 - 65535
+        /// </summary>
+        /// <param name="minutes">the number of minutes before timeout</param>
+        public void SetActiveTimeout(ushort minutes)
+        {
+            _touchscreen.ActiveTimeout.UShortValue = minutes;
+        }
+
+        /// <summary>
+        /// gets the active timeout in minutes
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns>active timeout in minutes</returns>
+        public ushort GetActiveTimeout()
+        {
+            return _touchscreen.ActiveTimeoutFeedBack.UShortValue;
+        }
+
+        /// <summary>
+        /// sets the auto brightness of buttons on or off
+        /// range: 0 - 65535
+        /// </summary>
+        /// <param name="state">enable or disable autobrightness</param>
+        public void SetAutoBrightness(bool state)
+        {
+            _touchscreen.AutoBrightnessEnabled.BoolValue = state;
+        }
+
+        /// <summary>
+        /// gets the auto brightness value
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns>true if autobrightness is enable, otherwise false</returns>
+        public bool GetAutoBrightness()
+        {
+            return _touchscreen.AutoBrightnessEnabledFeedBack.BoolValue;
+        }
+
+        /// <summary>
+        /// sets LED brightness of buttons
+        /// range: 0 - 65535
+        /// </summary>
+        /// <param name="value">brightness value</param>
+        public void SetLEDBrightness(ushort value)
+        {
+            _touchscreen.LEDBrightness.UShortValue = value;
+        }
+
+        /// <summary>
+        /// gets LED brightness of buttons
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns></returns>
+        public ushort GetLEDBrightness()
+        {
+            return _touchscreen.LEDBrightnessFeedBack.UShortValue;
+        }
+
+        /// <summary>
+        /// sets standby brightness (brightness of buttons when off)
+        /// range: 0 - 65535
+        /// </summary>
+        /// <param name="value">brightness value</param>
+        public void SetStandbyBrightness(ushort value)
+        {
+            _touchscreen.StandbyBrightness.UShortValue = value;
+        }
+
+        /// <summary>
+        /// gets stanby brightness value
+        /// range: 0 - 65535
+        /// </summary>
+        /// <returns>brightness value</returns>
+        public ushort GetStandbyBrightness()
+        {
+            return _touchscreen.StandbyBrightnessFeedBack.UShortValue;
         }
     }
 }

@@ -107,8 +107,6 @@ namespace SSharpPro_MPC3_Utility
                 
                 if (btnState == eButtonState.Pressed)
                 {
-                    CrestronConsole.PrintLine(">>> Button: {0} | State: {1} | Number: {2}", btnName, btnState, btnNum);
-
                     buttonPanelUtility.ExecuteButtonAction(btnName);
 
                     if (btnNum > 4)
@@ -242,9 +240,14 @@ namespace SSharpPro_MPC3_Utility
 
             //map buttons to methods
             buttonPanelUtility = new ButtonPanelUtility(tp);
-            //enable numerical buttons
-            buttonPanelUtility.EnableAllNumericalButtons(1,6);
+            //change settings
+            buttonPanelUtility.EnableNumericalButtons(1, 6);
             buttonPanelUtility.SetVolumeBar(32000);
+            buttonPanelUtility.SetActiveBrightness(65535);
+            buttonPanelUtility.SetActiveTimeout(3);
+            buttonPanelUtility.SetAutoBrightness(false);
+            buttonPanelUtility.SetLEDBrightness(65535);
+            buttonPanelUtility.SetStandbyBrightness(0);
 
             //assign buttons to methods
             buttonPanelUtility.AssignButton(eButtonName.Power, new Action(() => CrestronConsole.PrintLine("Power Command Executed")));
